@@ -1,6 +1,6 @@
 # MadiaHandler
 
-A description of this package.
+A swift library for work with photo library, camera and documents.
 
 ## Using
 
