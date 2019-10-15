@@ -45,7 +45,6 @@ Then, use public methods of mediaPicker in UIAlertActions of UIAlertController
 mediaPicker.openPhotoLibrary()
 mediaPicker.openDocumentPicker()
 mediaPicker.openMenu(.camera)
-
 ```
 Example:
 ```swift
@@ -56,5 +55,45 @@ let openPhotoLibraryAction = UIAlertAction(title: "Фотоальбомы", styl
 Show your AlertController
 ```swift
 model.mediaPicker.show(rootViewController: self, actionSheet: actionSheet)
+```
+## Attachment Icons
 
+To display your own attachment icons, you need to override the Icons class' properties:
+
+```swift
+public class Icons {
+    
+    //.mov, .mp4, .wmv, .ogg, .webm
+    public static var movie: UIImage?
+    
+    //.jpeg, .png, .bmp, .gif
+    public static var picture: UIImage?
+    
+    public static var pdf: UIImage?
+    public static var keynote: UIImage?
+    
+    public static var doc: UIImage?
+    public static var ppt: UIImage?
+    public static var xls: UIImage?
+    
+    public static var pages: UIImage?
+    public static var numbers: UIImage?
+    
+    //.rar, .zip
+    public static var archive: UIImage?
+    
+    //unknown
+    public static var file: UIImage?
+    
+}
+```
+Example:
+
+```swift
+Icons.archive = UIImage(named: "Archive")
+```
+or
+
+```swift
+Icons.movie = R.image.movie()
 ```

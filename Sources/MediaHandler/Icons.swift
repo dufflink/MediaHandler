@@ -8,7 +8,10 @@ import UIKit
 
 public class Icons {
     
+    //.mov, .mp4, .wmv, .ogg, .webm
     public static var movie: UIImage?
+    
+    //.jpeg, .png, .bmp, .gif
     public static var picture: UIImage?
     
     public static var pdf: UIImage?
@@ -21,7 +24,10 @@ public class Icons {
     public static var pages: UIImage?
     public static var numbers: UIImage?
     
+    //.rar, .zip
     public static var archive: UIImage?
+    
+    //unknown
     public static var file: UIImage?
     
 }
