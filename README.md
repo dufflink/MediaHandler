@@ -58,7 +58,7 @@ model.mediaPicker.show(rootViewController: self, actionSheet: actionSheet)
 ```
 ## Attachment Icons
 
-To display your own attachment icons, you need to override the Icons class' properties:
+For use your own MIMEType icons, you need to override the Icons class' properties:
 
 ```swift
 public class Icons {
