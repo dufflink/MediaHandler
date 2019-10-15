@@ -5,6 +5,10 @@ A swift library for work with photo library, camera and documents.
 ## Using
 
 #### 1. Import Library
+
+You can use Swift Package Manager for implement this library in your project by url of remote repository:
+[https://github.com/dufflink/MediaHandler](https://github.com/dufflink/MediaHandler)
+
 ```swift
 import MediaHandler
 ```
