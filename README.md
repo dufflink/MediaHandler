@@ -1,16 +1,16 @@
 # MadiaHandler
 
-A swift library for work with attachments.
+A description of this package.
 
 ## Using
 
-1. Import Library
-```
+#### 1. Import Library
+```swift
 import MediaHandler
 ```
-2. Create MediaPicker object and use MediaPickerDelegate delegate
+#### 2. Create MediaPicker object and use MediaPickerDelegate delegate
 
-```
+```swift
 let mediaPicker = MediaPicker()
 
 override func viewDidLoad() {
@@ -35,28 +35,26 @@ extension ViewController: MediaPickerDelegate {
 
 ```
 
-3. 
-
-Create any UIAlertController
-```
+#### 3. Create any UIAlertController
+```swift
 let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 ```
 
 Then, use public methods of mediaPicker in UIAlertActions of UIAlertController
-```
+```swift
 mediaPicker.openPhotoLibrary()
 mediaPicker.openDocumentPicker()
 mediaPicker.openMenu(.camera)
 
 ```
 Example:
-```
+```swift
 let openPhotoLibraryAction = UIAlertAction(title: "Фотоальбомы", style: .default) { _ in
     self.model.mediaPicker.openPhotoLibrary()
 }
 ```
 Show your AlertController
-```
+```swift
 model.mediaPicker.show(rootViewController: self, actionSheet: actionSheet)
 
 ```
