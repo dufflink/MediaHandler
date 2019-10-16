@@ -47,12 +47,12 @@ public class MediaPicker: UIImagePickerController {
         self.rootViewController = rootViewController
         
         imageScaler = UIImageScaler(maxImageSideSize: maxImageSideSize)
-        super.init(navigationBarClass: nil, toolbarClass: nil)
+        super.init(nibName: nil, bundle: nil)
     }
     
-    override init(navigationBarClass: AnyClass?, toolbarClass: AnyClass?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         imageScaler = UIImageScaler()
-        super.init(navigationBarClass: navigationBarClass, toolbarClass: toolbarClass)
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
     required init?(coder aDecoder: NSCoder) {
