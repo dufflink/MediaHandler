@@ -21,7 +21,7 @@ public protocol MediaPickerDelegate: class {
     
 }
 
-public class MeidaPicker: UIImagePickerController {
+public class MediaPicker: UIImagePickerController {
     
     public weak var filesDelegate: MediaPickerDelegate?
     var rootViewController: UIViewController?
@@ -207,7 +207,7 @@ public class MeidaPicker: UIImagePickerController {
 
 // MARK: UIDocumentPickerDelegate Functions
 
-extension MeidaPicker: UIDocumentPickerDelegate {
+extension MediaPicker: UIDocumentPickerDelegate {
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         var fileIsLarge = false
@@ -235,7 +235,7 @@ extension MeidaPicker: UIDocumentPickerDelegate {
 
 // MARK: UIImagePickerControllerDelegate Functions
 
-extension MeidaPicker: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension MediaPicker: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
