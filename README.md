@@ -15,14 +15,11 @@ import MediaHandler
 #### 2. Create MediaPicker object
 
 ```swift
-let mediaPicker = MediaPicker(rootViewController: controller)
+let mediaPicker = MediaPicker()
+mediaPicker.configure(rootViewController: self, maxFileSize: 100, maxImageSideSize: 1280)
 ```
-or
+`rootViewController` . This view controller need for presenting of pickers.
 
-```swift
-let mediaPicker = MediaPicker(rootViewController: controller, maxFileSize: 100, maxImageSideSize: 720)
-
-```
 `maxFileSize` (Optional). Use this parameter if you want to validate file size after picking. Validation will not be perform if this paramter is nil.
 
 `maxImageSideSize` (Optional). Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.

@@ -29,10 +29,10 @@ public class MediaPicker: UIImagePickerController {
     var fileSizeValidator: FileSizeValidator?
     var imageScaler: UIImageScaler
     
-    // MARK: - Life Cycle
+    // MARK: - Public Functions
     
     /**
-    Initializes and returns a newly MediaPicker.
+    Configure MediaPicker.
      
      - parameters:
         - rootViewController: UIViewController for presenting of pickers
@@ -40,28 +40,13 @@ public class MediaPicker: UIImagePickerController {
         - maxImageSideSize: Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.
     */
     
-    
-    
-    public init(rootViewController: UIViewController, maxFileSize: Int?, maxImageSideSize: CGFloat?) {
+    public func configure(rootViewController: UIViewController, maxFileSize: Int?, maxImageSideSize: CGFloat?) {
         if let maxFileSize = maxFileSize {
             fileSizeValidator = FileSizeValidator(maxFileSize: maxFileSize)
         }
         self.rootViewController = rootViewController
         
         imageScaler = UIImageScaler(maxImageSideSize: maxImageSideSize)
-        super.init(rootViewController: rootViewController)
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        imageScaler = UIImageScaler()
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        imageScaler = UIImageScaler()
-        
-        super.init(coder: aDecoder)
-        print("Couldn't init MediaPicker")
     }
     
     // MARK: - Public Functions
