@@ -40,7 +40,7 @@ public class MediaPicker: UIImagePickerController {
         - maxImageSideSize: Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.
     */
     
-    init(rootViewController: UIViewController, maxFileSize: Int?, maxImageSideSize: CGFloat?) {
+    public init(rootViewController: UIViewController, maxFileSize: Int?, maxImageSideSize: CGFloat?) {
         if let maxFileSize = maxFileSize {
             fileSizeValidator = FileSizeValidator(maxFileSize: maxFileSize)
         }
