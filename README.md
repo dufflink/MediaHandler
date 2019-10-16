@@ -12,22 +12,24 @@ You can use Swift Package Manager for implement this library in your project by 
 ```swift
 import MediaHandler
 ```
-#### 2. Create MediaPicker object and use MediaPickerDelegate delegate
+#### 2. Create MediaPicker object
 
 ```swift
 let mediaPicker = MediaPicker(rootViewController: controller)
 ```
 or
 
-maxFileSize (Optional). Use this parameter if you want to validate file size after picking. Validation will not be perform if this paramter is nil.
-maxImageSideSize (Optional). Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.
-
 ```swift
 let mediaPicker = MediaPicker(rootViewController: controller, maxFileSize: 100, maxImageSideSize: 720)
 
 ```
+`maxFileSize` (Optional). Use this parameter if you want to validate file size after picking. Validation will not be perform if this paramter is nil.
 
-```
+`maxImageSideSize` (Optional). Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.
+
+#### 3. MediaPickerDelegate
+
+```swift
 override func viewDidLoad() {
     mediaPicker.filesDelegate = self
 }
@@ -51,19 +53,18 @@ extension ViewController: MediaPickerDelegate {
     }
     
 }
-
 ```
 
-#### 3. Create any UIAlertController
-```swift
-let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-```
+#### 4. Public main methods
 
-Then, use public methods of mediaPicker in UIAlertActions of UIAlertController:
 
-* OpenDocumentPicker(): Opens a iCloud view for selecting documents. This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String).
-* OpenPhotoLibrary(): Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
-* OpenCamera(): Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+Use public methods of mediaPicker in UIAlertActions of UIAlertController:
+
+`OpenDocumentPicker()`: Opens a iCloud view for selecting documents. This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String).
+
+`OpenPhotoLibrary()`: Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+
+`OpenCamera()`: Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
 
 
 ```swift
@@ -71,11 +72,18 @@ mediaPicker.openPhotoLibrary()
 mediaPicker.openDocumentPicker()
 mediaPicker.openCamera()
 ```
-Example:
+Use Example:
+
+Here we create UIAlertCintroller:
+
 ```swift
+let alertController =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
 let openPhotoLibraryAction = UIAlertAction(title: "Фотоальбомы", style: .default) { _ in
     self.model.mediaPicker.openPhotoLibrary()
 }
+
+alertController.addAction(openPhotoLibraryAction)
 ```
 Or you can use custom view for call public methods
 
