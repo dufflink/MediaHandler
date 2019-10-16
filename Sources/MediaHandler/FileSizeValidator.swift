@@ -14,6 +14,10 @@ final class FileSizeValidator {
     
     // MARK: - Life Cycle
     
+    init() {
+        maxFileSize = 100
+    }
+    
     init(maxFileSize: Int) {
         self.maxFileSize = maxFileSize
     }

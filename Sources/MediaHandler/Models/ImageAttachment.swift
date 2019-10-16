@@ -12,7 +12,7 @@ import UIKit
     The model is used for photos created by camera and photolibrary.
 */
 
-public final class ImageAttachment: UploadAttachment {
+public class ImageAttachment: UploadAttachment {
     
     public let image: UIImage
     

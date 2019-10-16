@@ -10,16 +10,20 @@ import UIKit
 
 final class UIImageScaler {
     
-    let maxSideSize: CGFloat
+    let maxImageSideSize: CGFloat
     
     // MARK: - LifeCycle
     
     init() {
-        maxSideSize = 1280
+        maxImageSideSize = 1280
     }
     
-    init(maxSideSize: CGFloat) {
-        self.maxSideSize = maxSideSize
+    init(maxImageSideSize: CGFloat?) {
+        if let maxImageSideSize = maxImageSideSize {
+            self.maxImageSideSize = maxImageSideSize
+        } else {
+            self.maxImageSideSize = 1280
+        }
     }
     
     // MARK: - Public Functions
@@ -29,15 +33,15 @@ final class UIImageScaler {
         
         var longerSideLength: CGFloat = 0
         
-        if size.width > size.height && size.width > maxSideSize {
+        if size.width > size.height && size.width > maxImageSideSize {
             longerSideLength = size.width
-        } else if size.height > size.width && size.height > maxSideSize {
+        } else if size.height > size.width && size.height > maxImageSideSize {
             longerSideLength = size.height
         } else {
             return image
         }
         
-        let coefficient = longerSideLength / maxSideSize
+        let coefficient = longerSideLength / maxImageSideSize
         let scaleFactor = 1 / coefficient
         
         let scaledSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)

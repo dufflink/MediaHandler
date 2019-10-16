@@ -17,21 +17,59 @@ public protocol MediaPickerDelegate: class {
     
     func userDidDeniedPhotoLibraryPermission()
     
+    func userDidDeniedCameraPermission()
+    
 }
 
-public final class MeidaPicker: UIImagePickerController {
+public class MeidaPicker: UIImagePickerController {
     
     public weak var filesDelegate: MediaPickerDelegate?
+    var rootViewController: UIViewController?
     
-    public var rootViewController: UIViewController!
-    let fileSizeValidator = FileSizeValidator(maxFileSize: 100)
+    var fileSizeValidator: FileSizeValidator?
+    var imageScaler: UIImageScaler
+    
+    // MARK: - Life Cycle
+    
+    /**
+    Initializes and returns a newly MediaPicker.
+     
+     - parameters:
+        - rootViewController: UIViewController for presenting of pickers
+        - maxFileSize: Use this parameter if you want to validate file size after picking. Validation will not be perform if this paramter is nil.
+        - maxImageSideSize: Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.
+    */
+    
+    init(rootViewController: UIViewController, maxFileSize: Int?, maxImageSideSize: CGFloat?) {
+        if let maxFileSize = maxFileSize {
+            fileSizeValidator = FileSizeValidator(maxFileSize: maxFileSize)
+        }
+        self.rootViewController = rootViewController
+        
+        imageScaler = UIImageScaler(maxImageSideSize: maxImageSideSize)
+        super.init(navigationBarClass: nil, toolbarClass: nil)
+    }
+    
+    override init(navigationBarClass: AnyClass?, toolbarClass: AnyClass?) {
+        imageScaler = UIImageScaler()
+        super.init(navigationBarClass: navigationBarClass, toolbarClass: toolbarClass)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        imageScaler = UIImageScaler()
+        
+        super.init(coder: aDecoder)
+        print("Couldn't init MediaPicker")
+    }
     
     // MARK: - Public Functions
     
-    public func show(rootViewController: UIViewController, actionSheet: UIAlertController) {
-        self.rootViewController = rootViewController
-        rootViewController.present(actionSheet, animated: true)
-    }
+    /**
+        Opens a iCloud view for selecting documents.
+     
+        - returns:
+            This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String).
+    */
     
     public func openDocumentPicker() {
         DispatchQueue.main.async {
@@ -41,22 +79,44 @@ public final class MeidaPicker: UIImagePickerController {
             documentPiker.modalPresentationStyle = .fullScreen
             documentPiker.delegate = self
             
-            self.rootViewController.present(documentPiker, animated: true)
+            self.rootViewController?.present(documentPiker, animated: true)
         }
     }
     
-    public func openMenu(_ sourceType: UIImagePickerController.SourceType) {
-        DispatchQueue.main.async {
-            self.allowsEditing = true
-            self.delegate = self
-            
-            self.mediaTypes = [MediaType.image.rawValue, MediaType.movie.rawValue]
-            self.videoQuality = .typeHigh
-            
-            self.sourceType = sourceType
-            self.rootViewController.present(self, animated: true)
-        }
+    /**
+        Opens a camera menu with request of permission.
+     
+         - returns:
+         This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+    */
+    
+    public func openСamera() {
+        let permission = AVCaptureDevice.authorizationStatus(for: .video)
+        
+        switch permission {
+            case .authorized:
+                self.openMenu(.camera)
+            case .denied, .notDetermined:
+                AVCaptureDevice.requestAccess(for: .video) { granted in
+                    if granted {
+                        self.openMenu(.camera)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.filesDelegate?.userDidDeniedCameraPermission()
+                        }
+                    }
+                }
+            default:
+                break
+            }
     }
+    
+    /**
+        Opens a photo library menu with request of permission.
+     
+         - returns:
+         This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+    */
     
     public func openPhotoLibrary() {
         let permission = PHPhotoLibrary.authorizationStatus()
@@ -81,6 +141,19 @@ public final class MeidaPicker: UIImagePickerController {
     
     // MARK: - Private Functions
     
+    private func openMenu(_ sourceType: UIImagePickerController.SourceType) {
+        DispatchQueue.main.async {
+            self.allowsEditing = true
+            self.delegate = self
+            
+            self.mediaTypes = [MediaType.image.rawValue, MediaType.movie.rawValue]
+            self.videoQuality = .typeHigh
+            
+            self.sourceType = sourceType
+            self.rootViewController?.present(self, animated: true)
+        }
+    }
+    
     private func handlePickedMediaData(info: [UIImagePickerController.InfoKey : Any], source: String) {
         guard let type = info[.mediaType] as? String, let mediaType = MediaType(rawValue: type) else {
             return
@@ -90,10 +163,9 @@ public final class MeidaPicker: UIImagePickerController {
             case .image:
                 if var image = info[.originalImage] as? UIImage {
                     let queue = MHOperationQueue()
-                    let scaler = UIImageScaler()
                     
                     queue.addOperation {
-                        image = scaler.scale(image) ?? image
+                        image = self.imageScaler.scale(image) ?? image
                         
                         let name = Date().localTime + mediaType.fileExtension.value
                         let attachment = ImageAttachment(image: image, name: name, mimeType: mediaType.fileExtension.mimeType)
@@ -124,6 +196,13 @@ public final class MeidaPicker: UIImagePickerController {
         return MIMEType.file
     }
     
+    private func buildAttachment(by url: URL) {
+        let mimeType = getMIMEType(from: url)
+        let attachment = DocumentAttachment(url: url, mimeType: mimeType)
+        
+        filesDelegate?.didPick(attachment, source: "Документы")
+    }
+    
 }
 
 // MARK: UIDocumentPickerDelegate Functions
@@ -141,13 +220,14 @@ extension MeidaPicker: UIDocumentPickerDelegate {
             }
         }
         
-        if fileSizeValidator.validate(by: url.path) {
-            let mimeType = getMIMEType(from: url)
-            let attachment = DocumentAttachment(url: url, mimeType: mimeType)
-            
-            filesDelegate?.didPick(attachment, source: "Документы")
+        if let fileSizeValidator = fileSizeValidator {
+            if fileSizeValidator.validate(by: url.path) {
+                buildAttachment(by: url)
+            } else {
+                fileIsLarge = true
+            }
         } else {
-            fileIsLarge = true
+            buildAttachment(by: url)
         }
     }
     
@@ -158,18 +238,27 @@ extension MeidaPicker: UIDocumentPickerDelegate {
 extension MeidaPicker: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        func dismiss() {
+            picker.dismiss(animated: true) {
+                self.filesDelegate?.pickedFileIsLarge()
+            }
+        }
+        
         switch picker.sourceType {
             case .photoLibrary:
                 guard let url = info[.referenceURL] as? URL else {
                     return
                 }
                 
-                if fileSizeValidator.validate(by: url) {
-                    handlePickedMediaData(info: info, source: "Галерея")
-                } else {
-                    picker.dismiss(animated: true) {
-                        self.filesDelegate?.pickedFileIsLarge()
+                if let fileSizeValidator = fileSizeValidator {
+                    if fileSizeValidator.validate(by: url) {
+                        handlePickedMediaData(info: info, source: "Галерея")
+                    } else {
+                        dismiss()
                     }
+                } else {
+                    handlePickedMediaData(info: info, source: "Галерея")
                 }
             case .camera:
                 guard let type = info[.mediaType] as? String, let mediaType = MediaType(rawValue: type) else {
@@ -177,12 +266,14 @@ extension MeidaPicker: UIImagePickerControllerDelegate, UINavigationControllerDe
                 }
                 
                 if mediaType == .movie, let mediaURL = info[.mediaURL] as? URL {
-                    if fileSizeValidator.validate(by: mediaURL.path) {
-                        handlePickedMediaData(info: info, source: "Камера")
-                    } else {
-                        picker.dismiss(animated: true) {
-                            self.filesDelegate?.pickedFileIsLarge()
+                    if let fileSizeValidator = fileSizeValidator {
+                        if fileSizeValidator.validate(by: mediaURL.path) {
+                            handlePickedMediaData(info: info, source: "Камера")
+                        } else {
+                            dismiss()
                         }
+                    } else {
+                        handlePickedMediaData(info: info, source: "Камера")
                     }
                     
                     return
