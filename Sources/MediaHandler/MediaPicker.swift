@@ -27,7 +27,7 @@ public class MediaPicker: UIImagePickerController {
     var rootViewController: UIViewController?
     
     var fileSizeValidator: FileSizeValidator?
-    var imageScaler: UIImageScaler
+    var imageScaler: UIImageScaler?
     
     // MARK: - Public Functions
     
@@ -152,7 +152,7 @@ public class MediaPicker: UIImagePickerController {
                     let queue = MHOperationQueue()
                     
                     queue.addOperation {
-                        image = self.imageScaler.scale(image) ?? image
+                        image = self.imageScaler?.scale(image) ?? image
                         
                         let name = Date().localTime + mediaType.fileExtension.value
                         let attachment = ImageAttachment(image: image, name: name, mimeType: mediaType.fileExtension.mimeType)
