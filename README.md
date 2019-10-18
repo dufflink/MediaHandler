@@ -20,7 +20,7 @@ mediaPicker.configure(rootViewController: self, maxFileSize: 100, maxImageSideSi
 ```
 `rootViewController` . This view controller need for presenting of pickers.
 
-`maxFileSize` (Optional). Use this parameter if you want to validate file size after picking. Validation will not be perform if this paramter is nil.
+`maxFileSize` (Optional). Use this parameter if you want to validate file size (MB) after picking. Validation will not be perform if this paramter is nil.
 
 `maxImageSideSize` (Optional). Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.
 
