@@ -29,18 +29,20 @@ public protocol MediaPickerDelegate: class {
     
 }
 
-public class MediaPicker: UIImagePickerController {
+public class MediaPicker: NSObject {
     
     public weak var filesDelegate: MediaPickerDelegate?
-    var rootViewController: UIViewController?
+    weak var rootViewController: UIViewController?
+    
+    var imagePicker: UIImagePickerController
     
     var fileSizeValidator: FileSizeValidator?
     var imageScaler: UIImageScaler?
     
-    // MARK: - Public Functions
+    // MARK: - Life Cycle
     
     /**
-    Configure MediaPicker.
+    Returns a newly Media Picker object.
      
      - parameters:
         - rootViewController: UIViewController for presenting of pickers
@@ -48,13 +50,14 @@ public class MediaPicker: UIImagePickerController {
         - maxImageSideSize: Use this parameter if you want to scale image by largest side with your custom value. Default value is 1280.
     */
     
-    public func configure(rootViewController: UIViewController, maxFileSize: Int?, maxImageSideSize: CGFloat?) {
+    public init(rootViewController: UIViewController, maxFileSize: Int?, maxImageSideSize: CGFloat?) {
         if let maxFileSize = maxFileSize {
             fileSizeValidator = FileSizeValidator(maxFileSize: maxFileSize)
         }
         self.rootViewController = rootViewController
         
         imageScaler = UIImageScaler(maxImageSideSize: maxImageSideSize)
+        imagePicker = UIImagePickerController()
     }
     
     // MARK: - Public Functions
@@ -138,14 +141,14 @@ public class MediaPicker: UIImagePickerController {
     
     private func openMenu(_ sourceType: UIImagePickerController.SourceType) {
         DispatchQueue.main.async {
-            self.allowsEditing = true
-            self.delegate = self
+            self.imagePicker.allowsEditing = true
+            self.imagePicker.delegate = self
             
-            self.mediaTypes = [MediaType.image.rawValue, MediaType.movie.rawValue]
-            self.videoQuality = .typeHigh
+            self.imagePicker.mediaTypes = [MediaType.image.rawValue, MediaType.movie.rawValue]
+            self.imagePicker.videoQuality = .typeHigh
             
-            self.sourceType = sourceType
-            self.rootViewController?.present(self, animated: true)
+            self.imagePicker.sourceType = sourceType
+            self.rootViewController?.present(self.imagePicker, animated: true)
         }
     }
     
@@ -167,7 +170,7 @@ public class MediaPicker: UIImagePickerController {
                         
                         DispatchQueue.main.async {
                             self.filesDelegate?.didPick(attachment, source: source)
-                            self.dismiss(animated: true)
+                            self.imagePicker.dismiss(animated: true)
                         }
                     }
                 }
@@ -176,7 +179,7 @@ public class MediaPicker: UIImagePickerController {
                     let attachment = DocumentAttachment(url: url, mimeType: .mov)
                     
                     filesDelegate?.didPick(attachment, source: source)
-                    self.dismiss(animated: true)
+                    self.imagePicker.dismiss(animated: true)
                 }
             }
     }

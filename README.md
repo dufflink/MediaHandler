@@ -1,4 +1,4 @@
-# MadiaHandler
+# MediaHandler
 
 A swift library for work with photo library, camera and documents.
 
@@ -15,8 +15,7 @@ import MediaHandler
 #### 2. Create MediaPicker object
 
 ```swift
-let mediaPicker = MediaPicker()
-mediaPicker.configure(rootViewController: self, maxFileSize: 100, maxImageSideSize: 1280)
+let mediaPicker = MediaPicker(rootViewController: self, maxFileSize: 100, maxImageSideSize: 1280)
 ```
 `rootViewController` . This view controller need for presenting of pickers.
 
@@ -73,10 +72,10 @@ mediaPicker.openCamera()
 ```
 Use Example:
 
-Here we create UIAlertCintroller:
+Here we create UIAlertController:
 
 ```swift
-let alertController =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
 let openPhotoLibraryAction = UIAlertAction(title: "Фотоальбомы", style: .default) { _ in
     self.model.mediaPicker.openPhotoLibrary()
