@@ -35,6 +35,8 @@ extension ViewController: MediaPickerDelegate {
     
     func didPick(_ attachment: UploadAttachment, source: String) {
         //This method will be call when attachment will be pick
+        
+        //source - type of picker menu (photolibrary, camera or documents)
     }
     
     func pickedFileIsLarge() {
@@ -57,11 +59,11 @@ extension ViewController: MediaPickerDelegate {
 
 Use public methods of mediaPicker in UIAlertActions of UIAlertController:
 
-`OpenDocumentPicker()`: Opens a iCloud view for selecting documents. This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String).
+`openDocumentPicker()`: Opens a iCloud view for selecting documents. This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String).
 
-`OpenPhotoLibrary()`: Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+`openPhotoLibrary()`: Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
 
-`OpenCamera()`: Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+`openCamera()`: Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
 
 
 ```swift
@@ -97,6 +99,12 @@ public class Icons {
     //.jpeg, .png, .bmp, .gif
     public static var picture: UIImage?
     
+    //.rar, .zip
+    public static var archive: UIImage?
+    
+    //unknown
+    public static var file: UIImage?
+    
     public static var pdf: UIImage?
     public static var keynote: UIImage?
     
@@ -106,12 +114,6 @@ public class Icons {
     
     public static var pages: UIImage?
     public static var numbers: UIImage?
-    
-    //.rar, .zip
-    public static var archive: UIImage?
-    
-    //unknown
-    public static var file: UIImage?
     
 }
 ```

@@ -11,6 +11,14 @@ import Photos
 
 public protocol MediaPickerDelegate: class {
     
+    /**
+     This method will be called when a file is picked.
+     
+     - parameters:
+        - attchment: Model which have information about picked file.
+        - source: Type of picker menu (photolibrary, camera or documents).
+    */
+    
     func didPick(_ attachment: UploadAttachment, source: String)
     
     func pickedFileIsLarge()
