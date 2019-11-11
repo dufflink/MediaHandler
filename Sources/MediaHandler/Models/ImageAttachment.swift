@@ -16,7 +16,7 @@ public class ImageAttachment: UploadAttachment {
     
     public let image: UIImage
     
-    init(image: UIImage, name: String, mimeType: MIMEType) {
+    public init(image: UIImage, name: String, mimeType: MIMEType) {
         self.image = image
         super.init(name: name, mimeType: mimeType)
     }

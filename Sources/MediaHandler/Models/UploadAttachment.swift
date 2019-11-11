@@ -11,7 +11,7 @@ public class UploadAttachment {
     public let name: String
     public let mimeType: MIMEType
     
-    init(name: String, mimeType: MIMEType) {
+    public init(name: String, mimeType: MIMEType) {
         self.name = name
         self.mimeType = mimeType
     }

@@ -15,7 +15,7 @@ public class DocumentAttachment: UploadAttachment {
     
     public let url: URL
     
-    init(url: URL, mimeType: MIMEType) {
+    public init(url: URL, mimeType: MIMEType) {
         self.url = url
         let name = url.lastPathComponent
         
