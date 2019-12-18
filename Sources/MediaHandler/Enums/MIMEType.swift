@@ -72,5 +72,48 @@ public enum MIMEType: String {
         }
     }
     
+    public var fileExtension: FileExtension {
+        switch self {
+            case .file:
+                return .file
+            case .mov:
+                return .mov
+            case .mp4:
+                return .mp4
+            case .wmv:
+                return .wmv
+            case .ogg:
+                return .ogg
+            case .webm:
+                return .webm
+            case .jpeg:
+                return .jpeg
+            case .png:
+                return .png
+            case .bmp:
+                return .bmp
+            case .gif:
+                return .gif
+            case .pdf:
+                return .pdf
+            case .key:
+                return .key
+            case .docx:
+                return .docx
+            case .pptx:
+                return .pptx
+            case .xlsx:
+                return .xlsx
+            case .pages:
+                return .pages
+            case .numbers:
+                return .numbers
+            case .rar:
+                return .rar
+            case .zip:
+                return .zip
+        }
+    }
+    
 }
 

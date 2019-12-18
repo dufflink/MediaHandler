@@ -6,7 +6,7 @@
 //  Copyright © 2019 Maxim Skorynin. All rights reserved.
 //
 
-enum FileExtension: String {
+public enum FileExtension: String {
     
     case file = "file"
     
