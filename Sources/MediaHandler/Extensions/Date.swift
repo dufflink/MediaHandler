@@ -9,11 +9,11 @@ import Foundation
 
 extension Date {
     
-    var localTime: String {
+    var fileName: String {
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone.current
         
-        formatter.dateFormat = "dd.MM.yyyy,HH.mm.ss"
+        formatter.dateFormat = "yyyyMMdd_HHmmss"
         return formatter.string(from: self)
     }
     

@@ -141,7 +141,6 @@ public class MediaPicker: NSObject {
     
     private func openMenu(_ sourceType: UIImagePickerController.SourceType) {
         DispatchQueue.main.async {
-            self.imagePicker.allowsEditing = true
             self.imagePicker.delegate = self
             
             self.imagePicker.mediaTypes = [MediaType.image.rawValue, MediaType.movie.rawValue]
@@ -165,7 +164,7 @@ public class MediaPicker: NSObject {
                     queue.addOperation {
                         image = self.imageScaler?.scale(image) ?? image
                         
-                        let name = Date().localTime + mediaType.fileExtension.value
+                        let name = "IMG_\(Date().fileName)\(mediaType.fileExtension.value)"
                         let attachment = ImageAttachment(image: image, name: name, mimeType: mediaType.fileExtension.mimeType)
                         
                         DispatchQueue.main.async {
