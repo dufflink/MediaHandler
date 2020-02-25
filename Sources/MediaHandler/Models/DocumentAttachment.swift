@@ -11,7 +11,7 @@ import Foundation
     The model is used for documents and videos.
 */
 
-public class DocumentAttachment: UploadAttachment {
+public class DocumentAttachment: UploadingAttachment {
     
     public let url: URL
     

@@ -19,7 +19,7 @@ public protocol MediaPickerDelegate: class {
         - source: Type of picker menu (photolibrary, camera or documents).
     */
     
-    func didPick(_ attachment: UploadAttachment, source: String)
+    func didPick(_ attachment: UploadingAttachment, source: String)
     
     func pickedFileIsLarge()
     
@@ -66,7 +66,7 @@ public class MediaPicker: NSObject {
         Opens a iCloud view for selecting documents.
      
         - returns:
-            This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String).
+            This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String).
     */
     
     public func openDocumentPicker() {
@@ -85,7 +85,7 @@ public class MediaPicker: NSObject {
         Opens a camera menu with request of permission.
      
          - returns:
-         This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+         This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
     */
     
     public func openСamera() {
@@ -113,7 +113,7 @@ public class MediaPicker: NSObject {
         Opens a photo library menu with request of permission.
      
          - returns:
-         This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+         This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
     */
     
     public func openPhotoLibrary() {

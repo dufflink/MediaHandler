@@ -32,7 +32,7 @@ override func viewDidLoad() {
 
 extension ViewController: MediaPickerDelegate {
     
-    func didPick(_ attachment: UploadAttachment, source: String) {
+    func didPick(_ attachment: UploadingAttachment, source: String) {
         //This method will be call when attachment will be pick
         
         //source - type of picker menu (photolibrary, camera or documents)
@@ -58,11 +58,11 @@ extension ViewController: MediaPickerDelegate {
 
 Use public methods of mediaPicker in UIAlertActions of UIAlertController:
 
-`openDocumentPicker()`: Opens a iCloud view for selecting documents. This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String).
+`openDocumentPicker()`: Opens a iCloud view for selecting documents. This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String).
 
-`openPhotoLibrary()`: Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+`openPhotoLibrary()`: Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
 
-`openCamera()`: Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadAttachment, source: String)
+`openCamera()`: Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
 
 
 ```swift
