@@ -84,20 +84,23 @@ public class MediaPicker: NSObject {
     /**
         Opens a camera menu with request of permission.
      
+         - parameters:
+            - canRecordVideo: If the value is true, then you can record video from the camera screen.
+         
          - returns:
          This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
     */
     
-    public func openСamera(canRecordVideo: Bool? = nil) {
+    public func openСamera(canRecordVideo: Bool) {
         let permission = AVCaptureDevice.authorizationStatus(for: .video)
         
         switch permission {
             case .authorized:
-                self.openMenu(.camera, canRecordVideo: canRecordVideo)
+                self.openMenu(.camera, includeMovieType: canRecordVideo)
             case .denied, .notDetermined:
                 AVCaptureDevice.requestAccess(for: .video) { granted in
                     if granted {
-                        self.openMenu(.camera)
+                        self.openMenu(.camera, includeMovieType: canRecordVideo)
                     } else {
                         DispatchQueue.main.async {
                             self.filesDelegate?.userDidDeniedCameraPermission()
@@ -112,20 +115,23 @@ public class MediaPicker: NSObject {
     /**
         Opens a photo library menu with request of permission.
      
+         - parameters:
+            - includeVideo: If the value is true, then you can pick video from the photo library screen.
+     
          - returns:
          This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
     */
     
-    public func openPhotoLibrary() {
+    public func openPhotoLibrary(includeVideo: Bool) {
         let permission = PHPhotoLibrary.authorizationStatus()
         
         switch permission {
             case .authorized:
-                self.openMenu(.photoLibrary)
+                self.openMenu(.photoLibrary, includeMovieType: includeVideo)
             case .denied, .notDetermined:
                 PHPhotoLibrary.requestAuthorization { status in
                     if status == .authorized {
-                        self.openMenu(.photoLibrary)
+                        self.openMenu(.photoLibrary, includeMovieType: includeVideo)
                     } else {
                         DispatchQueue.main.async {
                             self.filesDelegate?.userDidDeniedPhotoLibraryPermission()
@@ -139,12 +145,12 @@ public class MediaPicker: NSObject {
     
     // MARK: - Private Functions
     
-    private func openMenu(_ sourceType: UIImagePickerController.SourceType, canRecordVideo: Bool? = nil) {
+    private func openMenu(_ sourceType: UIImagePickerController.SourceType, includeMovieType: Bool) {
         DispatchQueue.main.async {
             self.imagePicker.delegate = self
             self.imagePicker.mediaTypes = [MediaType.image.rawValue]
             
-            if canRecordVideo == true {
+            if includeMovieType {
                 self.imagePicker.mediaTypes += [MediaType.movie.rawValue]
             }
             
