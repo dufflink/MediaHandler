@@ -88,12 +88,12 @@ public class MediaPicker: NSObject {
          This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
     */
     
-    public func openСamera() {
+    public func openСamera(canRecordVideo: Bool? = nil) {
         let permission = AVCaptureDevice.authorizationStatus(for: .video)
         
         switch permission {
             case .authorized:
-                self.openMenu(.camera)
+                self.openMenu(.camera, canRecordVideo: canRecordVideo)
             case .denied, .notDetermined:
                 AVCaptureDevice.requestAccess(for: .video) { granted in
                     if granted {
@@ -139,11 +139,15 @@ public class MediaPicker: NSObject {
     
     // MARK: - Private Functions
     
-    private func openMenu(_ sourceType: UIImagePickerController.SourceType) {
+    private func openMenu(_ sourceType: UIImagePickerController.SourceType, canRecordVideo: Bool? = nil) {
         DispatchQueue.main.async {
             self.imagePicker.delegate = self
+            self.imagePicker.mediaTypes = [MediaType.image.rawValue]
             
-            self.imagePicker.mediaTypes = [MediaType.image.rawValue, MediaType.movie.rawValue]
+            if canRecordVideo == true {
+                self.imagePicker.mediaTypes += [MediaType.movie.rawValue]
+            }
+            
             self.imagePicker.videoQuality = .typeHigh
             
             self.imagePicker.sourceType = sourceType
