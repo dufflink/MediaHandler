@@ -86,21 +86,22 @@ public class MediaPicker: NSObject {
      
          - parameters:
             - canRecordVideo: If the value is true, then you can record video from the camera screen.
+            - isFrontCamera: If the value is true, then front camera will be used at the start camera screen.
          
          - returns:
          This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
     */
     
-    public func openСamera(canRecordVideo: Bool) {
+    public func openСamera(canRecordVideo: Bool, isFrontCamera: Bool = false) {
         let permission = AVCaptureDevice.authorizationStatus(for: .video)
         
         switch permission {
             case .authorized:
-                self.openMenu(.camera, includeMovieType: canRecordVideo)
+                self.openMenu(.camera, includeMovieType: canRecordVideo, isFrontCamera: isFrontCamera)
             case .denied, .notDetermined:
                 AVCaptureDevice.requestAccess(for: .video) { granted in
                     if granted {
-                        self.openMenu(.camera, includeMovieType: canRecordVideo)
+                        self.openMenu(.camera, includeMovieType: canRecordVideo, isFrontCamera: isFrontCamera)
                     } else {
                         DispatchQueue.main.async {
                             self.filesDelegate?.userDidDeniedCameraPermission()
@@ -145,7 +146,7 @@ public class MediaPicker: NSObject {
     
     // MARK: - Private Functions
     
-    private func openMenu(_ sourceType: UIImagePickerController.SourceType, includeMovieType: Bool) {
+    private func openMenu(_ sourceType: UIImagePickerController.SourceType, includeMovieType: Bool, isFrontCamera: Bool = false) {
         DispatchQueue.main.async {
             self.imagePicker.delegate = self
             self.imagePicker.mediaTypes = [MediaType.image.rawValue]
@@ -155,8 +156,12 @@ public class MediaPicker: NSObject {
             }
             
             self.imagePicker.videoQuality = .typeHigh
-            
             self.imagePicker.sourceType = sourceType
+            
+            if sourceType == .camera && isFrontCamera {
+                self.imagePicker.cameraDevice = .front
+            }
+            
             self.rootViewController?.present(self.imagePicker, animated: true)
         }
     }

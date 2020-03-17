@@ -60,15 +60,15 @@ Use public methods of mediaPicker in UIAlertActions of UIAlertController:
 
 `openDocumentPicker()`: Opens a iCloud view for selecting documents. This method return DocumentAttachment object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String).
 
-`openPhotoLibrary()`: Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
+`openPhotoLibrary(includeVideo: Bool)`: Opens a photo library menu with request of permission. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
 
-`openCamera()`: Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
+`openСamera(canRecordVideo: Bool, isFrontCamera: Bool = false)`: Opens a camera. This method return ImageAttachment (picture) or DocumentAttachment (video) object in delegate (MediaPickerDelegate) method didPick(_ attachment: UploadingAttachment, source: String)
 
 
 ```swift
-mediaPicker.openPhotoLibrary()
+mediaPicker.openPhotoLibrary(includeVideo: true)
+mediaPicker.openСamera(canRecordVideo: true)
 mediaPicker.openDocumentPicker()
-mediaPicker.openCamera()
 ```
 Use Example:
 
@@ -78,7 +78,7 @@ Here we create UIAlertController:
 let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
 let openPhotoLibraryAction = UIAlertAction(title: "Фотоальбомы", style: .default) { _ in
-    self.model.mediaPicker.openPhotoLibrary()
+    self.model.mediaPicker.openPhotoLibrary(includeVideo: true)
 }
 
 alertController.addAction(openPhotoLibraryAction)
